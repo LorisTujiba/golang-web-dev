@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>index</title>
+</head>
+<body>
+    {{$wisdom := .}}<!-- This is where the data going to be passed.
+    the dot is the current value of the data at that point in execution
+    to use a variable use dollar sign-->
+    <h1>The meaning of life: {{$wisdom}}</h1>
+</body>
+</html>

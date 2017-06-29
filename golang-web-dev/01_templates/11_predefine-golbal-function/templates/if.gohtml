@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title></title>
+</head>
+<body>
+    {{if .}} <!-- If there is a data-->
+        {{.}}
+    {{end}}
+
+    {{range .}}
+        {{if .Name}} <!-- If have name-->
+            {{.}}
+        {{end}}
+    {{end}}
+
+    {{range .}}
+        {{if gt .Age 17}} <!--if greater than -->
+            {{.}}
+        {{end}}
+    {{end}}
+
+    {{range .}}
+        {{if gt .Age 23}} <!--if lesser than -->
+            {{.}}
+        {{end}}
+    {{end}}
+
+    {{range .}}
+        {{if eq .Age 17}} <!--if equal than -->
+            {{.}}
+        {{end}}
+    {{end}}
+
+    {{range .}}
+        {{if and .Name .Age}} <!--And operation-->
+            {{.}}
+        {{end}}
+    {{end}}
+</body>
+</html>

@@ -9,7 +9,12 @@ import (
 )
 
 func main() {
-	name := "Loris Tujiba"
+
+	//Take argument when call
+
+	name := os.Args[1]
+	fmt.Println(os.Args[0])
+	fmt.Println(os.Args[1])
 	str := fmt.Sprint(`
 		<!DOCTYPE html>
 		<html lang="en">
@@ -33,3 +38,8 @@ func main() {
 
 	io.Copy(nf, strings.NewReader(str))
 }
+
+/*
+at the terminal:
+go run main.go Loris
+*/

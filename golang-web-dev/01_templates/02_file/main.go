@@ -1,17 +1,18 @@
 package main
 
 import (
-	"os"
 	"fmt"
-	"log"
 	"io"
+	"log"
+	"os"
 	"strings"
 )
 
 func main() {
-	name := os.Args[1]
-	fmt.Println(os.Args[0])
-	fmt.Println(os.Args[1])
+
+	//Save the HTML into another file
+
+	name := "Loris Tujiba"
 	str := fmt.Sprint(`
 		<!DOCTYPE html>
 		<html lang="en">
@@ -21,13 +22,13 @@ func main() {
 		</head>
 		<body>
 		<h1>` +
-		name +
+		name + //passing the data
 		`</h1>
 		</body>
 		</html>
 	`)
 
-	nf, err := os.Create("index.html")
+	nf, err := os.Create("index.html") //create a file with the name of index.html
 	if err != nil {
 		log.Fatal("error creating file", err)
 	}
@@ -35,8 +36,3 @@ func main() {
 
 	io.Copy(nf, strings.NewReader(str))
 }
-
-/*
-at the terminal:
-go run main.go Loris
-*/
