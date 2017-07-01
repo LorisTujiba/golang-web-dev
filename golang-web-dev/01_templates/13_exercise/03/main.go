@@ -9,27 +9,27 @@ restaurant's menu including Breakfast, Lunch, and Dinner items
 
 import (
 	"html/template"
-	"os"
 	"log"
+	"os"
 )
 
-type food struct{
-	Name string
+type food struct {
+	Name  string
 	Price float64
 }
 
-type meal struct{
+type meal struct {
 	Time string
-	F []food
+	F    []food
 }
 
 var tpl *template.Template
 
-func init(){
+func init() {
 	tpl = template.Must(template.ParseFiles("index.gohtml"))
 }
 
-func main(){
+func main() {
 
 	meals := []meal{
 		meal{
@@ -77,8 +77,8 @@ func main(){
 		},
 	}
 
-	err := tpl.Execute(os.Stdout,meals)
-	if err != nil{
+	err := tpl.Execute(os.Stdout, meals)
+	if err != nil {
 		log.Fatal(err)
 	}
 

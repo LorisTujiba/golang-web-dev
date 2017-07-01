@@ -9,23 +9,23 @@ menu information for an unlimited number of restaurants.
 
 import (
 	"html/template"
-	"os"
 	"log"
+	"os"
 )
 
-type food struct{
-	Name string
+type food struct {
+	Name  string
 	Price float64
 }
 
-type meal struct{
+type meal struct {
 	Time string
-	F []food
+	F    []food
 }
 
 type menu []meal
 
-type restaurant struct{
+type restaurant struct {
 	Name string
 	Menu menu
 }
@@ -34,11 +34,11 @@ type restaurants []restaurant
 
 var tpl *template.Template
 
-func init(){
+func init() {
 	tpl = template.Must(template.ParseFiles("index.gohtml"))
 }
 
-func main(){
+func main() {
 
 	meals := []meal{
 		meal{
@@ -143,8 +143,8 @@ func main(){
 		},
 	}
 
-	err := tpl.Execute(os.Stdout,restaurants)
-	if err != nil{
+	err := tpl.Execute(os.Stdout, restaurants)
+	if err != nil {
 		log.Fatal(err)
 	}
 

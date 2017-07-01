@@ -12,25 +12,26 @@ can hold an unlimited number of hotels
 
 import (
 	"html/template"
-	"os"
 	"log"
+	"os"
 )
 
-type Hotel struct{
-	Name string
+//Hotel is exported as the data container
+type Hotel struct {
+	Name    string
 	Address string
-	City string
-	Zip string
-	Region string
+	City    string
+	Zip     string
+	Region  string
 }
 
 var tpl *template.Template
 
-func init(){
+func init() {
 	tpl = template.Must(template.ParseFiles("index.gohtml"))
 }
 
-func main(){
+func main() {
 
 	datas := []Hotel{
 		Hotel{"A",
@@ -39,19 +40,19 @@ func main(){
 			"11530",
 			"Central"},
 		Hotel{"Central",
-			  "A",
-			  "Central City",
-			  "12320",
-			  "Central"},
+			"A",
+			"Central City",
+			"12320",
+			"Central"},
 		Hotel{"B",
-			  "B",
-			  "B",
-			  "13530",
-			  "Central"},
+			"B",
+			"B",
+			"13530",
+			"Central"},
 	}
 
-	err := tpl.Execute(os.Stdout,datas)
-	if err != nil{
+	err := tpl.Execute(os.Stdout, datas)
+	if err != nil {
 		log.Fatal(err)
 	}
 

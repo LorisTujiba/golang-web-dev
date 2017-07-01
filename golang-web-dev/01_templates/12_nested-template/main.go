@@ -19,7 +19,7 @@ type user struct {
 
 func main() {
 
-	err := tpl.ExecuteTemplate(os.Stdout, "index.gohtml",42)
+	err := tpl.ExecuteTemplate(os.Stdout, "index.gohtml", 42)
 	if err != nil {
 		log.Fatal(err)
 	}
