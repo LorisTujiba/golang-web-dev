@@ -10,7 +10,7 @@ import (
 )
 
 func main(){
-	lis,err := net.Listen("tcp",":8082")
+	lis,err := net.Listen("tcp",":8083")
 	if err != nil{
 		log.Fatal(err)
 	}
@@ -30,9 +30,9 @@ func handle(conn net.Conn){
 	defer conn.Close()
 
 	io.WriteString(conn,"USE:\n" +
-		"SET key value" +
-		"GET key value" +
-		"DEL key value")
+		"SET key value\n" +
+		"GET key value\n" +
+		"DEL key value\n")
 
 	//read and write
 	data := make(map[string]string)
@@ -55,9 +55,11 @@ func handle(conn net.Conn){
 			key := fs[1]
 			value := fs[2]
 			data[key] = value
+			fmt.Fprintln(conn,"Added!\n")
 		case "DEL":
 			key := fs[1]
 			delete(data,key)
+			fmt.Fprintln(conn,"Deleted!\n")
 		default:
 			fmt.Fprintln(conn,"Invalid command")
 		}

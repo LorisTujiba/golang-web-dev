@@ -19,7 +19,7 @@ import (
 
 func main(){
 
-	lis,err := net.Listen("tcp",":8080")
+	lis,err := net.Listen("tcp",":8081")
 	if err != nil{
 		log.Fatal(err)
 	}
@@ -57,8 +57,9 @@ func rot13(input []byte) []byte{ // create another slice of byte
 		}else{
 			r13[i] = v - 13	// if lower, subtract 13 char
 		}
-		return r13
 	}
-
-	return input
+	return r13
 }
+
+//run the server
+//open new cmd, telnet
