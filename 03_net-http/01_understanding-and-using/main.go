@@ -64,3 +64,5 @@ func main(){
 
 	http.ListenAndServe(":8080",d)// so the handler can be passed onto the http package
 }
+
+//run this, open localhost:8080 from your browser

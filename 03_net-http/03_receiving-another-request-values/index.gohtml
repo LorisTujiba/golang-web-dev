@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title></title>
+</head>
+<body>
+    <p>
+        Method          : {{.Method}}<br/>
+        URL             : {{.URL}}<br/>
+        Submissions     : {{.Submissions}}<br/>
+        Header          :<br/>
+        {{range $key, $value := .Header}}
+            <b>{{$key}}</b><br/>
+            {{range $value}}
+                {{.}}<br/>
+            {{end}}<br/>
+        {{end}}
+        Host            : {{.Host}}<br/>
+        ContentLength   : {{.ContentLength}}<br/>
+    </p>
+</body>
+</html>
