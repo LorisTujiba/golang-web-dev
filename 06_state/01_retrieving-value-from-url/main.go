@@ -7,7 +7,6 @@ so to handle that, we can use this code below
 
 import (
 	"net/http"
-	"fmt"
 	"io"
 )
 
