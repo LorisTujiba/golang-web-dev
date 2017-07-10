@@ -14,37 +14,37 @@ Use "http.ServeFile" to serve the file "dog.jpeg"
 */
 
 import (
-	"net/http"
-	"io"
 	"html/template"
+	"io"
+	"net/http"
 	"os"
 )
 
 var tpl *template.Template
 
-func foo (w http.ResponseWriter,r *http.Request){
-	io.WriteString(w,"foo ran")
+func foo(w http.ResponseWriter, r *http.Request) {
+	io.WriteString(w, "foo ran")
 }
 
-func dog (w http.ResponseWriter,r *http.Request){
-	tpl.Execute(w,"This is from dog")
+func dog(w http.ResponseWriter, r *http.Request) {
+	tpl.Execute(w, "This is from dog")
 }
 
-func file (w http.ResponseWriter, r *http.Request){
-	fl,err := os.Open("dog.jpg")
-	if err != nil{
-		http.Error(w,"Not found",404)
+func file(w http.ResponseWriter, r *http.Request) {
+	fl, err := os.Open("dog.jpg")
+	if err != nil {
+		http.Error(w, "Not found", 404)
 	}
-	http.ServeFile(w,r,fl.Name())
+	http.ServeFile(w, r, fl.Name())
 }
 
-func init(){
+func init() {
 	tpl = template.Must(template.ParseFiles("dog.gohtml"))
 }
 
-func main(){
-	http.HandleFunc("/",foo)
-	http.HandleFunc("/dog",dog)
-	http.HandleFunc("/dog.jpg",file)
-	http.ListenAndServe(":8080",nil)
+func main() {
+	http.HandleFunc("/", foo)
+	http.HandleFunc("/dog", dog)
+	http.HandleFunc("/dog.jpg", file)
+	http.ListenAndServe(":8080", nil)
 }

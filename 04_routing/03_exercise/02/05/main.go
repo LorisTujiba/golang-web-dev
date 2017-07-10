@@ -1,28 +1,28 @@
 package main
 
 import (
-	"net"
 	"bufio"
 	"fmt"
 	"io"
+	"net"
 )
 
 /*
 Add code to WRITE to the connection.
- */
+*/
 
-func main(){
+func main() {
 
-	lis,err := net.Listen("tcp",":8080")
-	if err != nil{
+	lis, err := net.Listen("tcp", ":8080")
+	if err != nil {
 		panic(err)
 	}
 
 	defer lis.Close()
 
-	for{
-		conn,err := lis.Accept()
-		if err != nil{
+	for {
+		conn, err := lis.Accept()
+		if err != nil {
 			panic(err)
 		}
 		go serve(conn)
@@ -30,7 +30,7 @@ func main(){
 
 }
 
-func serve (conn net.Conn){
+func serve(conn net.Conn) {
 	defer conn.Close()
 	scanner := bufio.NewScanner(conn)
 	for scanner.Scan() {
@@ -40,5 +40,5 @@ func serve (conn net.Conn){
 			break
 		}
 	}
-	io.WriteString(conn,"This is the response")
+	io.WriteString(conn, "This is the response")
 }

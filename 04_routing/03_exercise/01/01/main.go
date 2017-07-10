@@ -1,8 +1,8 @@
 package main
 
 import (
-	"net/http"
 	"io"
+	"net/http"
 )
 
 /*
@@ -19,23 +19,23 @@ Have the "/me/" route print out your name.
 
 var name = "Loris Tujiba Soejonopoetro"
 
-func handleIndex(w http.ResponseWriter,response *http.Request){
-	io.WriteString(w,"This is an index page")
+func handleIndex(w http.ResponseWriter, response *http.Request) {
+	io.WriteString(w, "This is an index page")
 }
 
-func handleDog(w http.ResponseWriter,response *http.Request){
-	io.WriteString(w,"This is a dog page")
+func handleDog(w http.ResponseWriter, response *http.Request) {
+	io.WriteString(w, "This is a dog page")
 }
 
-func handleMe(w http.ResponseWriter,response *http.Request){
-	io.WriteString(w,name)
+func handleMe(w http.ResponseWriter, response *http.Request) {
+	io.WriteString(w, name)
 }
 
-func main(){
+func main() {
 
-	http.HandleFunc("/",handleIndex)
-	http.HandleFunc("/dog",handleDog)
-	http.HandleFunc("/me",handleMe)
-	http.ListenAndServe(":8080",nil)
+	http.HandleFunc("/", handleIndex)
+	http.HandleFunc("/dog", handleDog)
+	http.HandleFunc("/me", handleMe)
+	http.ListenAndServe(":8080", nil)
 
 }

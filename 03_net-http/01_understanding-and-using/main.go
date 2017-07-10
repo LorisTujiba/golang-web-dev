@@ -30,20 +30,20 @@ type Handler interface {
 
 Any type that has ServeHTTP method is implementing the type handler
 
- */
+*/
 
 import (
-	"net/http"
 	"fmt"
+	"net/http"
 )
 
-type anything  int // create a type
+type anything int // create a type
 
-func (input anything) ServeHTTP(w http.ResponseWriter, r *http.Request){//that type is implementing type handler
+func (input anything) ServeHTTP(w http.ResponseWriter, r *http.Request) { //that type is implementing type handler
 	fmt.Fprintln(w, "Any code you want in this func")
 }
 
-func main(){
+func main() {
 	var d anything
 
 	/*=======================================================
@@ -62,7 +62,7 @@ func main(){
 	DefaultServeMux is used.
 	*/
 
-	http.ListenAndServe(":8080",d)// so the handler can be passed onto the http package
+	http.ListenAndServe(":8080", d) // so the handler can be passed onto the http package
 }
 
 //run this, open localhost:8080 from your browser

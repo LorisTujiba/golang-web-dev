@@ -10,52 +10,51 @@ cipher, developed in ancient Rome.
 */
 
 import (
-	"net"
-	"log"
 	"bufio"
-	"strings"
 	"fmt"
+	"log"
+	"net"
+	"strings"
 )
 
-func main(){
+func main() {
 
-	lis,err := net.Listen("tcp",":8081")
-	if err != nil{
+	lis, err := net.Listen("tcp", ":8081")
+	if err != nil {
 		log.Fatal(err)
 	}
 	defer lis.Close()
 
-	for{
+	for {
 		conn, err := lis.Accept()
-		if err!= nil{
+		if err != nil {
 			log.Fatal(err)
 		}
 
 		go handle(conn)
 	}
 
-
 }
 
-func handle(conn net.Conn){
+func handle(conn net.Conn) {
 	scanner := bufio.NewScanner(conn)
-	for scanner.Scan(){
+	for scanner.Scan() {
 		ln := strings.ToLower(scanner.Text())
 		bs := []byte(ln)
 		r := rot13(bs)
 
-		fmt.Fprintf(conn,"%s - %s",ln,r)
+		fmt.Fprintf(conn, "%s - %s", ln, r)
 	}
 }
 
-func rot13(input []byte) []byte{ // create another slice of byte
+func rot13(input []byte) []byte { // create another slice of byte
 	var r13 = make([]byte, len(input))
-	for i, v := range input{//get index and value
+	for i, v := range input { //get index and value
 		//ascii 97-122 (a-z)
-		if v <= 109{
+		if v <= 109 {
 			r13[i] = v + 13 //if lower than m, add 13 char
-		}else{
-			r13[i] = v - 13	// if lower, subtract 13 char
+		} else {
+			r13[i] = v - 13 // if lower, subtract 13 char
 		}
 	}
 	return r13

@@ -1,10 +1,10 @@
 package main
 
 import (
-	"net"
-	"io"
 	"bufio"
 	"fmt"
+	"io"
+	"net"
 )
 
 /*
@@ -27,28 +27,28 @@ When your "ln" line of text is equal to an empty string, break out of the loop.
 Run your code and go to localhost:8080 in your browser.
 
 What do you find?
- */
+*/
 
-func main(){
+func main() {
 
-	lis,err := net.Listen("tcp",":8080")
-	if err != nil{
+	lis, err := net.Listen("tcp", ":8080")
+	if err != nil {
 		panic(err)
 	}
 
 	defer lis.Close()
 
-	for{
-		conn,err := lis.Accept()
-		if err != nil{
+	for {
+		conn, err := lis.Accept()
+		if err != nil {
 			panic(err)
 		}
 		scanner := bufio.NewScanner(conn)
-		for scanner.Scan(){
+		for scanner.Scan() {
 			ln := scanner.Text()
 			fmt.Println(ln)
 
-			if ln == ""{
+			if ln == "" {
 				break
 			}
 		}

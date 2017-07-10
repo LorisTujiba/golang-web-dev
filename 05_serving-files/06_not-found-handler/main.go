@@ -3,20 +3,20 @@ package main
 /*
 Sometimes web browser gonna looking for an favicon.ico
 so to handle that, we can use this code below
- */
+*/
 
 import (
-	"net/http"
 	"fmt"
+	"net/http"
 )
 
-func handleHome(w http.ResponseWriter,r *http.Request){
+func handleHome(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(r.URL)
-	fmt.Fprintln(w,"go look at your terminal")
+	fmt.Fprintln(w, "go look at your terminal")
 }
 
-func main(){
-	http.HandleFunc("/",handleHome)
-	http.Handle("/favicon.ico",http.NotFoundHandler())
-	http.ListenAndServe(":8080",nil)
+func main() {
+	http.HandleFunc("/", handleHome)
+	http.Handle("/favicon.ico", http.NotFoundHandler())
+	http.ListenAndServe(":8080", nil)
 }

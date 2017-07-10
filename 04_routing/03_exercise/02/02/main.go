@@ -1,10 +1,10 @@
 package main
 
 import (
-	"net"
-	"io"
 	"bufio"
 	"fmt"
+	"io"
+	"net"
 )
 
 /*
@@ -27,24 +27,24 @@ In your web browser, visit localhost:8080.
 Now go back and look at your terminal.
 
 Can you answer the question as to why "I see you connected." is never written?
- */
+*/
 
-func main(){
+func main() {
 
-	lis,err := net.Listen("tcp",":8080")
-	if err != nil{
+	lis, err := net.Listen("tcp", ":8080")
+	if err != nil {
 		panic(err)
 	}
 
 	defer lis.Close()
 
-	for{
-		conn,err := lis.Accept()
-		if err != nil{
+	for {
+		conn, err := lis.Accept()
+		if err != nil {
 			panic(err)
 		}
 		scanner := bufio.NewScanner(conn)
-		for scanner.Scan(){
+		for scanner.Scan() {
 			ln := scanner.Text()
 			fmt.Println(ln)
 		}

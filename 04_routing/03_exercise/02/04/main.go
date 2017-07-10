@@ -1,10 +1,10 @@
 package main
 
 import (
-	"net"
-	"io"
 	"bufio"
 	"fmt"
+	"io"
+	"net"
 )
 
 /*
@@ -15,20 +15,20 @@ Extract the code you wrote to READ from the connection using bufio.NewScanner in
 Pass the connection of type net.Conn as an argument into this function.
 
 Add "go" in front of the call to "serve" to enable concurrency and multiple connections.
- */
+*/
 
-func main(){
+func main() {
 
-	lis,err := net.Listen("tcp",":8080")
-	if err != nil{
+	lis, err := net.Listen("tcp", ":8080")
+	if err != nil {
 		panic(err)
 	}
 
 	defer lis.Close()
 
-	for{
-		conn,err := lis.Accept()
-		if err != nil{
+	for {
+		conn, err := lis.Accept()
+		if err != nil {
 			panic(err)
 		}
 		go serve(conn)
@@ -36,7 +36,7 @@ func main(){
 
 }
 
-func serve (conn net.Conn){
+func serve(conn net.Conn) {
 	defer conn.Close()
 	scanner := bufio.NewScanner(conn)
 	for scanner.Scan() {

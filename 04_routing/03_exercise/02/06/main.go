@@ -1,10 +1,10 @@
 package main
 
 import (
-	"net"
 	"bufio"
 	"fmt"
 	"io"
+	"net"
 )
 
 /*
@@ -27,20 +27,20 @@ fmt.Fprint(c, "Content-Type: text/plain\r\n")
 "\r\n"
 
 Look in your browser "developer tools" under the network tab. Compare the RESPONSE HEADERS from the previous file with the RESPONSE HEADERS in your new solution.
- */
+*/
 
-func main(){
+func main() {
 
-	lis,err := net.Listen("tcp",":8080")
-	if err != nil{
+	lis, err := net.Listen("tcp", ":8080")
+	if err != nil {
 		panic(err)
 	}
 
 	defer lis.Close()
 
-	for{
-		conn,err := lis.Accept()
-		if err != nil{
+	for {
+		conn, err := lis.Accept()
+		if err != nil {
 			panic(err)
 		}
 		go serve(conn)
@@ -48,7 +48,7 @@ func main(){
 
 }
 
-func serve (conn net.Conn){
+func serve(conn net.Conn) {
 	defer conn.Close()
 	scanner := bufio.NewScanner(conn)
 	for scanner.Scan() {
@@ -59,9 +59,9 @@ func serve (conn net.Conn){
 		}
 	}
 	body := "check the response via the network, hit f12"
-	io.WriteString(conn,"HTTP/1.1 200 OK\r\n")
-	fmt.Fprintf(conn,"content-Length: %d\r\n",len(body))
+	io.WriteString(conn, "HTTP/1.1 200 OK\r\n")
+	fmt.Fprintf(conn, "content-Length: %d\r\n", len(body))
 	fmt.Fprint(conn, "Content-Type: text/plain\r\n")
-	io.WriteString(conn,"\r\n")
-	io.WriteString(conn,body)
+	io.WriteString(conn, "\r\n")
+	io.WriteString(conn, body)
 }

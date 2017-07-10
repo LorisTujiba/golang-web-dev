@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title></title>
+</head>
+<body>
+    <form method="post">
+        <input type="text" name="name"/>
+        <input type="text" name="password"/>
+        <input type="submit"/>
+    </form>
+
+    <a href = "/getuserdata">Get the session</a><br>
+
+    {{if .Password}}
+        Username = {{.Username}}<br/>
+        Password = {{.Password}}<br/>
+    {{end}}
+</body>
+</html>

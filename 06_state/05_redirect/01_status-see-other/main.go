@@ -1,9 +1,9 @@
-package _1_status_see_other
+package main
 
 import (
+	"fmt"
 	"html/template"
 	"net/http"
-	"fmt"
 )
 
 /*
@@ -49,36 +49,35 @@ http/1.1	200			ok
 
 var tpl *template.Template
 
-func init(){
+func init() {
 	tpl = template.Must(template.ParseFiles("index.gohtml"))
 }
 
-func main(){
-	http.HandleFunc("/",foo)
-	http.HandleFunc("/bar",bar)
-	http.HandleFunc("/barred",barred)
-	http.Handle("/favicon.ico",http.NotFoundHandler())
-	http.ListenAndServe(":8080",nil)
+func main() {
+	http.HandleFunc("/", foo)
+	http.HandleFunc("/bar", bar)
+	http.HandleFunc("/barred", barred)
+	http.Handle("/favicon.ico", http.NotFoundHandler())
+	http.ListenAndServe(":8080", nil)
 }
 
-func foo(w http.ResponseWriter,r *http.Request){
-	fmt.Println("home - req method : ",r.Method,"\n\n")
+func foo(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("home - req method : ", r.Method, "\n\n")
 }
-func bar(w http.ResponseWriter,r *http.Request){
-	fmt.Println("bar - req method : ",r.Method,"\n\n")
+func bar(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("bar - req method : ", r.Method, "\n\n")
 	//process form data
-	w.Header().Set("Location","/") //set req line location to be /
-	w.WriteHeader(http.StatusSeeOther)//303, remember 303 will always sete the method to get
+	w.Header().Set("Location", "/")    //set req line location to be /
+	w.WriteHeader(http.StatusSeeOther) //303, remember 303 will always sete the method to get
 }
 
 /*
 if you go to barred,pass something
 
 the return will be post and get, cuz 303
- */
+*/
 
-func barred(w http.ResponseWriter,r *http.Request){
-	fmt.Println("barred - req method : ",r.Method,"\n\n")
-	tpl.Execute(w,nil)
+func barred(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("barred - req method : ", r.Method, "\n\n")
+	tpl.Execute(w, nil)
 }
-

@@ -14,6 +14,6 @@ commonly in static website, there has to be an index.html file
 
 import "net/http"
 
-func main(){
-	http.ListenAndServe(":8080",http.FileServer(http.Dir(".")))
+func main() {
+	http.ListenAndServe(":8080", http.FileServer(http.Dir(".")))
 }
