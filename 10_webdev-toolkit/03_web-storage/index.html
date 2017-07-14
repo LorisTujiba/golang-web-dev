@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <!--
+
+        Store datas and values, there's 2 option:
+        Local storage and Session Storage
+
+        Session Storage : if you closed the browser, the data perished
+        Local Storage   : the data persist even if you close the browser till you
+        delete it explicitly
+
+    -->
+    <script>
+        localStorage.setItem('favoriteflavor','vanilla');
+        var taste = localStorage.getItem('favoriteflavor');
+        //localStorage.removeItem('favoriteflavor')
+        console.log(taste)
+
+        sessionStorage.setItem('favoriteflavor','vanilla');
+        var taste = sessionStorage.getItem('favoriteflavor');
+        //sessionStorage.removeItem('favoriteflavor')
+        sessionStorage.log(taste)
+    </script>
+</body>
+</html>
