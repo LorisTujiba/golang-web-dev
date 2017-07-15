@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title></title>
+</head>
+<body>
+
+    <form>
+        <input type="text" name="username" id="username"placeholder="Username ... "/>
+        <p id="err"></p>
+        <input type="submit" id="submitbutton" value="Sign Up"/>
+    </form>
+
+</body>
+
+<script>
+    var username = document.querySelector("#username")
+    var nameErr = document.querySelector("#err")
+
+    username.addEventListener('input',function(){
+        var xhr = new XMLHttpRequest()
+        xhr.open("POST","/checkName",true)//send a request to checkname route, post method
+        xhr.addEventListener('readystatechange',function(){
+            if(xhr.readyState === XMLHttpRequest.DONE && xhr.status == 200){
+                var item = xhr.responseText
+
+                if(item == 'true'){
+
+                    nameErr.textContent = 'Username taken!'
+                    document.querySelector('#submitbutton').disabled = true;
+
+                }else{
+
+                    nameErr.textContent = 'ok';
+                    document.querySelector('#submitbutton').disabled = false;
+
+                }
+            }
+        });
+
+        xhr.send(username.value)
+
+    });
+
+</script>
+
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<!--
+==============================================================
+AJAX - Async Javascript and XML
+============================================================
+Allows your client browser to communicate with server
+without reloading the page.
+-->
+
+    <h1>Make a request!</h1>
+
+</body>
+</html>
+<script>
+
+    document.querySelector('h1').onclick = makeRequest;
+
+    function makeRequest(){
+
+        //create a XMLHttpRequest
+        var xhr = new XMLHttpRequest();//create a new request, assign to xhr
+
+        //open the request
+        //xhr.open('GET','test.gohtml',true),//pass the method, what we want to open, true makes we want to use async
+        xhr.open('GET','data.txt'),//pass the method, what we want to open, true makes we want to use async
+
+        //handle the rewsponse
+        xhr.onreadystatechange = function(){
+            if(xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200){//200 = ok
+                alert(xhr.responseText);
+            }
+        };
+
+        //send the request
+        xhr.send();
+    }
+
+
+</script>
