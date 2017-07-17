@@ -1,10 +1,10 @@
 package main
 
 import (
-"github.com/LorisTujiba/gotraining/src/github.com/satori/go.uuid"
-"html/template"
-"net/http"
-"golang.org/x/crypto/bcrypt"
+	"github.com/LorisTujiba/gotraining/src/github.com/satori/go.uuid"
+	"golang.org/x/crypto/bcrypt"
+	"html/template"
+	"net/http"
 )
 
 /*
@@ -13,7 +13,7 @@ For now, we're going to create a predefine
 user.
 
 We're going to create sign out next time
- */
+*/
 
 var tpl *template.Template
 
@@ -29,8 +29,8 @@ func init() {
 	tpl = template.Must(template.ParseGlob("templates/*"))
 	//pre-defined user
 
-	pass,err := bcrypt.GenerateFromPassword([]byte("admin"),bcrypt.MinCost)
-	if err!=nil{
+	pass, err := bcrypt.GenerateFromPassword([]byte("admin"), bcrypt.MinCost)
+	if err != nil {
 		panic(err)
 	}
 
@@ -46,45 +46,45 @@ func main() {
 	http.HandleFunc("/", index)
 	http.HandleFunc("/home", home)
 	http.HandleFunc("/signup", signUp)
-	http.HandleFunc("/login",login)
+	http.HandleFunc("/login", login)
 	http.ListenAndServe(":8080", nil)
 }
 
-func login(w http.ResponseWriter,r *http.Request){
+func login(w http.ResponseWriter, r *http.Request) {
 	//validate first, if already logged in, redirect
-	if alreadyLoggedIn(r){
-		http.Redirect(w,r,"/",http.StatusSeeOther)
+	if alreadyLoggedIn(r) {
+		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
 
-	if r.Method == http.MethodPost{
+	if r.Method == http.MethodPost {
 		//get the value
 		un := r.FormValue("username")
 		up := r.FormValue("password")
 
 		//check if the password match
-		if bcrypt.CompareHashAndPassword(userDatas[un].Password,[]byte(up))!=nil{
-			http.Error(w,"Doesn't Match",http.StatusUnauthorized)
+		if bcrypt.CompareHashAndPassword(userDatas[un].Password, []byte(up)) != nil {
+			http.Error(w, "Doesn't Match", http.StatusUnauthorized)
 			return
 		}
 
 		//else, then put the data into session
 		SID := uuid.NewV4()
 		sess := &http.Cookie{
-			Name:"session",
-			Value:SID.String(),
+			Name:  "session",
+			Value: SID.String(),
 		}
-		http.SetCookie(w,sess)
+		http.SetCookie(w, sess)
 
 		//put it in the association
 		association[sess.Value] = un
 
 		//then redirect
-		http.Redirect(w,r,"/home",http.StatusSeeOther)
+		http.Redirect(w, r, "/home", http.StatusSeeOther)
 		return
 	}
 
-	tpl.ExecuteTemplate(w,"login.gohtml",nil)
+	tpl.ExecuteTemplate(w, "login.gohtml", nil)
 }
 
 func index(w http.ResponseWriter, r *http.Request) {
@@ -136,9 +136,9 @@ func signUp(w http.ResponseWriter, r *http.Request) {
 		association[cookie.Value] = username
 
 		//use bcrypt
-		bs,err :=bcrypt.GenerateFromPassword([]byte(password),bcrypt.MinCost)
-		if err!=nil{
-			http.Error(w,err.Error(),http.StatusInternalServerError)
+		bs, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.MinCost)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 
@@ -173,7 +173,7 @@ func getUser(w http.ResponseWriter, req *http.Request) user {
 
 func alreadyLoggedIn(req *http.Request) bool {
 	cookie, err := req.Cookie("session") //get the cookie
-	if err != nil {//if there's already a cookie, redirect
+	if err != nil {                      //if there's already a cookie, redirect
 		return false
 	}
 	username := association[cookie.Value]

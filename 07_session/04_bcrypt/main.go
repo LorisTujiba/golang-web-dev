@@ -14,19 +14,18 @@ package main
 */
 
 import (
-"github.com/LorisTujiba/gotraining/src/github.com/satori/go.uuid"
-"html/template"
-"net/http"
+	"github.com/LorisTujiba/gotraining/src/github.com/satori/go.uuid"
 	"golang.org/x/crypto/bcrypt"
+	"html/template"
+	"net/http"
 )
 
 var tpl *template.Template
 
-
 /*
 Because we're going to use bcrypt, so we're going to change
 the password type to slice of byte
- */
+*/
 
 type user struct {
 	Username string
@@ -91,9 +90,9 @@ func signUp(w http.ResponseWriter, r *http.Request) {
 		association[cookie.Value] = username
 
 		//use bcrypt
-		bs,err :=bcrypt.GenerateFromPassword([]byte(password),bcrypt.MinCost)
-		if err!=nil{
-			http.Error(w,err.Error(),http.StatusInternalServerError)
+		bs, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.MinCost)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 
@@ -105,7 +104,6 @@ func signUp(w http.ResponseWriter, r *http.Request) {
 	}
 	tpl.ExecuteTemplate(w, "signup.gohtml", nil)
 }
-
 
 func getUser(w http.ResponseWriter, req *http.Request) user {
 	// get cookie

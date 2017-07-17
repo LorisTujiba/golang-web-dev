@@ -21,4 +21,4 @@ func handleHome(w http.ResponseWriter, r *http.Request) {
 	io.WriteString(w, "The value from the url is : "+value)
 }
 
-//run http://localhosy:8080/?q=dog
+//run http://localhost:8080/?q=dog

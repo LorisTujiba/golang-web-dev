@@ -1,12 +1,12 @@
 package main
 
 import (
-"github.com/LorisTujiba/gotraining/src/github.com/satori/go.uuid"
-"html/template"
-"net/http"
-"golang.org/x/crypto/bcrypt"
-	"time"
 	"fmt"
+	"github.com/LorisTujiba/gotraining/src/github.com/satori/go.uuid"
+	"golang.org/x/crypto/bcrypt"
+	"html/template"
+	"net/http"
+	"time"
 )
 
 /*======================================================
@@ -22,23 +22,22 @@ var tpl *template.Template
 type user struct {
 	Username string
 	Password []byte
-	Role string
+	Role     string
 }
 
 //create session with field to track their last activity
 //time
-type session struct{
-	un string
+type session struct {
+	un           string
 	lastActivity time.Time
 }
 
 var userDatas = map[string]user{}
-var association = map[string]session{}//change from string to session, we're no longer just using the username
+var association = map[string]session{} //change from string to session, we're no longer just using the username
 var cleanTime time.Time
 
 //Create a constant variable as the time length
 const sessionLength int = 30
-
 
 func init() {
 	tpl = template.Must(template.ParseGlob("templates/*"))
@@ -47,8 +46,8 @@ func init() {
 	//We're initiating that the cleanTime is when the program first start, act as the pivot point
 	cleanTime = time.Now()
 
-	pass,err := bcrypt.GenerateFromPassword([]byte("admin"),bcrypt.MinCost)
-	if err!=nil{
+	pass, err := bcrypt.GenerateFromPassword([]byte("admin"), bcrypt.MinCost)
+	if err != nil {
 		panic(err)
 	}
 
@@ -61,76 +60,76 @@ func init() {
 
 }
 
-func logout(w http.ResponseWriter,r *http.Request){
-	if !alreadyLoggedIn(w,r){
-		http.Redirect(w,r,"/",http.StatusSeeOther)
+func logout(w http.ResponseWriter, r *http.Request) {
+	if !alreadyLoggedIn(w, r) {
+		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
 
-	c,_ := r.Cookie("session")
+	c, _ := r.Cookie("session")
 
 	//delete from association
-	delete(association,c.Value)
+	delete(association, c.Value)
 
 	//remove cookie
 	c = &http.Cookie{
-		Name:"session",
-		MaxAge:-1,
-		Value:"",
+		Name:   "session",
+		MaxAge: -1,
+		Value:  "",
 	}
 
-	http.SetCookie(w,c)
+	http.SetCookie(w, c)
 
 	//clean up dbsessions
-	if time.Now().Sub(cleanTime) > (time.Second *30){//if the time of the program started and the clean time differ 30 secs, clean the session
+	if time.Now().Sub(cleanTime) > (time.Second * 30) { //if the time of the program started and the clean time differ 30 secs, clean the session
 		//clean every 30 sec
 		go cleanSessions()
 	}
 
-	http.Redirect(w,r,"/",http.StatusSeeOther)
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 	return
 }
 
-func login(w http.ResponseWriter,r *http.Request){
+func login(w http.ResponseWriter, r *http.Request) {
 	//validate first, if already logged in, redirect
-	if alreadyLoggedIn(w,r){
-		http.Redirect(w,r,"/",http.StatusSeeOther)
+	if alreadyLoggedIn(w, r) {
+		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
 
-	if r.Method == http.MethodPost{
+	if r.Method == http.MethodPost {
 		//get the value
 		un := r.FormValue("username")
 		up := r.FormValue("password")
 
 		//check if the password match
-		if bcrypt.CompareHashAndPassword(userDatas[un].Password,[]byte(up))!=nil{
-			http.Error(w,"Doesn't Match",http.StatusUnauthorized)
+		if bcrypt.CompareHashAndPassword(userDatas[un].Password, []byte(up)) != nil {
+			http.Error(w, "Doesn't Match", http.StatusUnauthorized)
 			return
 		}
 
 		//else, then put the data into session
 		SID := uuid.NewV4()
 		sess := &http.Cookie{
-			Name:"session",
-			MaxAge:sessionLength,
-			Value:SID.String(),
+			Name:   "session",
+			MaxAge: sessionLength,
+			Value:  SID.String(),
 		}
-		http.SetCookie(w,sess)
+		http.SetCookie(w, sess)
 
 		//put it in the association
-		association[sess.Value] = session{un,time.Now()}
+		association[sess.Value] = session{un, time.Now()}
 
 		//then redirect
-		http.Redirect(w,r,"/home",http.StatusSeeOther)
+		http.Redirect(w, r, "/home", http.StatusSeeOther)
 		return
 	}
 
-	tpl.ExecuteTemplate(w,"login.gohtml",nil)
+	tpl.ExecuteTemplate(w, "login.gohtml", nil)
 }
 
 func signUp(w http.ResponseWriter, r *http.Request) {
-	if alreadyLoggedIn(w,r) { // if user already logged in , redirect
+	if alreadyLoggedIn(w, r) { // if user already logged in , redirect
 		http.Redirect(w, r, "/home", http.StatusSeeOther)
 		return
 	}
@@ -149,22 +148,22 @@ func signUp(w http.ResponseWriter, r *http.Request) {
 		SID := uuid.NewV4()
 
 		cookie := &http.Cookie{
-			Name:  "session",
+			Name:   "session",
 			MaxAge: sessionLength,
-			Value: SID.String(),
+			Value:  SID.String(),
 		}
 		http.SetCookie(w, cookie)
 
-		association[cookie.Value] = session{username,time.Now()}
+		association[cookie.Value] = session{username, time.Now()}
 
 		//use bcrypt
-		bs,err :=bcrypt.GenerateFromPassword([]byte(password),bcrypt.MinCost)
-		if err!=nil{
-			http.Error(w,err.Error(),http.StatusInternalServerError)
+		bs, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.MinCost)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 
-		userDatas[username] = user{username, bs,role}
+		userDatas[username] = user{username, bs, role}
 
 		//redirect
 		http.Redirect(w, r, "/home", http.StatusSeeOther)
@@ -173,21 +172,21 @@ func signUp(w http.ResponseWriter, r *http.Request) {
 	tpl.ExecuteTemplate(w, "signup.gohtml", nil)
 }
 
-func cleanSessions(){
-	showSessions()//shows the list of the sessions
-	for k,v := range association{
-		if time.Now().Sub(v.lastActivity) > 3000 || v.un == ""{// if the time of program start and the user last act differ more than 30 secs, delete the assoc
-			delete(association,k)
+func cleanSessions() {
+	showSessions() //shows the list of the sessions
+	for k, v := range association {
+		if time.Now().Sub(v.lastActivity) > 3000 || v.un == "" { // if the time of program start and the user last act differ more than 30 secs, delete the assoc
+			delete(association, k)
 		}
 	}
-	cleanTime = time.Now()// refresh the clean time to now
+	cleanTime = time.Now() // refresh the clean time to now
 	fmt.Println("After Clean")
-	showSessions()//shows the list of the sessions
+	showSessions() //shows the list of the sessions
 }
 
-func showSessions(){
-	for k,v := range association{
-		fmt.Println(k,v.un)
+func showSessions() {
+	for k, v := range association {
+		fmt.Println(k, v.un)
 	}
 }
 
@@ -198,7 +197,7 @@ func showSessions(){
 func getUser(w http.ResponseWriter, req *http.Request) user {
 	// get cookie
 	cookie, err := req.Cookie("session")
-	if err != nil {//if there's no session, create the session
+	if err != nil { //if there's no session, create the session
 		sID := uuid.NewV4()
 		cookie = &http.Cookie{
 			Name:  "session",
@@ -226,11 +225,11 @@ func getUser(w http.ResponseWriter, req *http.Request) user {
 
 func alreadyLoggedIn(w http.ResponseWriter, req *http.Request) bool {
 	cookie, err := req.Cookie("session") //get the cookie
-	if err != nil {//if there's already a cookie, redirect
+	if err != nil {                      //if there's already a cookie, redirect
 		return false
 	}
-	ud,ok := association[cookie.Value]
-	if ok{
+	ud, ok := association[cookie.Value]
+	if ok {
 		ud.lastActivity = time.Now()
 		association[cookie.Value] = ud
 	}
@@ -238,11 +237,10 @@ func alreadyLoggedIn(w http.ResponseWriter, req *http.Request) bool {
 	_, okay := userDatas[ud.un] //check if the cookie contain the username, then use ok idiom
 
 	cookie.MaxAge = sessionLength
-	http.SetCookie(w,cookie)
+	http.SetCookie(w, cookie)
 
 	return okay
 }
-
 
 //Add show session to track
 
@@ -251,31 +249,31 @@ func main() {
 	http.HandleFunc("/home", home)
 	http.HandleFunc("/transaction", transaction)
 	http.HandleFunc("/signup", signUp)
-	http.HandleFunc("/login",login)
-	http.HandleFunc("/logout",logout)
+	http.HandleFunc("/login", login)
+	http.HandleFunc("/logout", logout)
 	http.ListenAndServe(":8080", nil)
 }
 
-func transaction(w http.ResponseWriter,r *http.Request){
-	if !alreadyLoggedIn(w,r){
-		http.Redirect(w,r,"/",http.StatusSeeOther)
+func transaction(w http.ResponseWriter, r *http.Request) {
+	if !alreadyLoggedIn(w, r) {
+		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
 
-	user := getUser(w,r)
+	user := getUser(w, r)
 
-	if user.Role != "Admin"{
-		http.Error(w,"Only admin can be authorized",http.StatusForbidden)
+	if user.Role != "Admin" {
+		http.Error(w, "Only admin can be authorized", http.StatusForbidden)
 		return
 	}
 	showSessions()
-	tpl.ExecuteTemplate(w,"transaction.gohtml",nil)
+	tpl.ExecuteTemplate(w, "transaction.gohtml", nil)
 
 }
 
 func index(w http.ResponseWriter, r *http.Request) {
 
-	if alreadyLoggedIn(w,r) {
+	if alreadyLoggedIn(w, r) {
 		http.Redirect(w, r, "/home", http.StatusSeeOther)
 		return
 	}
@@ -288,7 +286,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 func home(w http.ResponseWriter, r *http.Request) {
 
 	user := getUser(w, r)
-	if !alreadyLoggedIn(w,r) {
+	if !alreadyLoggedIn(w, r) {
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}

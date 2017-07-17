@@ -1,10 +1,10 @@
 package main
 
 import (
-	"net/http"
 	"encoding/json"
-	"log"
 	"fmt"
+	"log"
+	"net/http"
 )
 
 /*================================================
@@ -20,7 +20,7 @@ type person struct {
 	Items []string
 }
 
-func main(){
+func main() {
 
 	//marshall-un marshall, save it in a variable, stores the result in the value pointed to by v
 	//encode-decode, write it somewhere
@@ -33,7 +33,7 @@ func main(){
 }
 
 func foo(w http.ResponseWriter, req *http.Request) {
-	fmt.Fprintln(w,"You are at foo")
+	fmt.Fprintln(w, "You are at foo")
 }
 
 func marshl(w http.ResponseWriter, req *http.Request) {

@@ -1,10 +1,10 @@
-package _1
+package main
 
 import (
-	"net/http"
-	"fmt"
 	"context"
+	"fmt"
 	"log"
+	"net/http"
 	"time"
 )
 
@@ -22,47 +22,47 @@ call path by signaling context's Done channel.
 
 var err error
 
-func main(){
+func main() {
 
-	http.HandleFunc("/",foo)
-	http.HandleFunc("/bar",bar)
-	http.ListenAndServe(":8080",nil)
+	http.HandleFunc("/", foo)
+	http.HandleFunc("/bar", bar)
+	http.ListenAndServe(":8080", nil)
 
 }
 
-func bar(w http.ResponseWriter,r *http.Request){
+func bar(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
 	log.Println(ctx)
-	fmt.Fprintln(w,ctx)
+	fmt.Fprintln(w, ctx)
 }
 
-func foo(w http.ResponseWriter,r *http.Request){
+func foo(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
-	ctx = context.WithValue(ctx,"userID", 777)
-	ctx = context.WithValue(ctx,"fName", "Bond")
+	ctx = context.WithValue(ctx, "userID", 777)
+	ctx = context.WithValue(ctx, "fName", "Bond")
 
-	results := dbAccess(ctx)// pull out the data using this dbAccess to pass the data back
-	results2,err := dbAccess2(ctx)
-	if err!=nil{
+	results := dbAccess(ctx) // pull out the data using this dbAccess to pass the data back
+	results2, err := dbAccess2(ctx)
+	if err != nil {
 		panic(err)
 	}
 
-	fmt.Fprintln(w,results)
-	fmt.Fprintln(w,results2)
+	fmt.Fprintln(w, results)
+	fmt.Fprintln(w, results2)
 
 }
 
-func dbAccess2(ctx context.Context)(int,error){
+func dbAccess2(ctx context.Context) (int, error) {
 	ctx, cancel := context.WithTimeout(ctx, 1*time.Second)
 	defer cancel()
 
-	ch:=make(chan int)
-	go func(){
-		uid := ctx.Value("userID").(int)
+	ch := make(chan int)
+	go func() {
+		uid := ctx.Value(1).(int)
 
-		if ctx.Err() != nil{
+		if ctx.Err() != nil {
 			return
 		}
 
@@ -70,7 +70,7 @@ func dbAccess2(ctx context.Context)(int,error){
 	}()
 
 	select {
-	case <- ctx.Done():
+	case <-ctx.Done():
 		return 0, ctx.Err()
 	case i := <-ch:
 		return i, nil
@@ -78,7 +78,7 @@ func dbAccess2(ctx context.Context)(int,error){
 
 }
 
-func dbAccess(ctx context.Context) int{
+func dbAccess(ctx context.Context) int {
 	uid := ctx.Value("userID").(int)
 	return uid
 }

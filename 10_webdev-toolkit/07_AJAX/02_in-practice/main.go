@@ -1,25 +1,25 @@
 package main
 
 import (
-	"net/http"
+	"fmt"
 	"html/template"
 	"io/ioutil"
-	"fmt"
+	"net/http"
 )
 
 var tpl *template.Template
 
-func init(){
+func init() {
 	tpl = template.Must(template.ParseFiles("index.gohtml"))
 }
 
-func main(){
-	http.HandleFunc("/",foo)
-	http.HandleFunc("/checkName",checkName)
-	http.ListenAndServe(":8080",nil)
+func main() {
+	http.HandleFunc("/", foo)
+	http.HandleFunc("/checkName", checkName)
+	http.ListenAndServe(":8080", nil)
 }
 
-func checkName(w http.ResponseWriter,r *http.Request){
+func checkName(w http.ResponseWriter, r *http.Request) {
 
 	sampleUsers := map[string]bool{
 		"test@example.com": true,
@@ -39,8 +39,8 @@ func checkName(w http.ResponseWriter,r *http.Request){
 
 }
 
-func foo(w http.ResponseWriter,r *http.Request){
+func foo(w http.ResponseWriter, r *http.Request) {
 
-	tpl.Execute(w,nil)
+	tpl.Execute(w, nil)
 
 }

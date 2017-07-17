@@ -7,16 +7,16 @@ import (
 
 /*
 Unmarshall, transform json to be placed into go data structure
- */
+*/
 
-type user struct{
-	Name string
-	Age int
+type user struct {
+	Name    string
+	Age     int
 	Address string
-	Gender string
+	Gender  string
 }
 
-func main(){
+func main() {
 	var uData user
 
 	datas := `{
@@ -27,10 +27,10 @@ func main(){
 	}` // supposed that this data are received from an API
 
 	err := json.Unmarshal([]byte(datas), &uData) //unmarshal, remember save to variable. Because unmarshall
-	if err!=nil{
+	if err != nil {
 		panic(err)
 	}
 
-	fmt.Println(uData)//print the uData
-	fmt.Println(uData.Gender)//get certain data
+	fmt.Println(uData)        //print the uData
+	fmt.Println(uData.Gender) //get certain data
 }

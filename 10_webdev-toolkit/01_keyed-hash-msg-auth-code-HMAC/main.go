@@ -3,8 +3,8 @@ package main
 import (
 	"crypto/hmac"
 	"crypto/sha256"
-	"io"
 	"fmt"
+	"io"
 )
 
 /*======================================================
@@ -15,9 +15,9 @@ This hash will need a key, so it will produce
 different output if the key is different.
 even though the thing you hashd is the
 same.
- */
+*/
 
-func main(){
+func main() {
 
 	hash("test@example.com")
 	hash("test@example.com")
@@ -25,8 +25,8 @@ func main(){
 
 }
 
-func hash(s string){
-	h := hmac.New(sha256.New,[]byte("myKey"))
-	io.WriteString(h,s)
+func hash(s string) {
+	h := hmac.New(sha256.New, []byte("myKey"))
+	io.WriteString(h, s)
 	fmt.Println(h.Sum(nil))
 }
