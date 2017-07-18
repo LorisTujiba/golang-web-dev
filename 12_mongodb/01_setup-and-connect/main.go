@@ -7,7 +7,12 @@ import (
 	"net/http"
 )
 
-/*
+/*=========================================================
+MongoDB
+=========================================================
+MongoDB is a document storage, we can just store JSON
+inside it.
+
 First, go get the mongodb driver
 
 go get gopkg.in/mgo.v2

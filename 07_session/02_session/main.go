@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/LorisTujiba/gotraining/src/github.com/satori/go.uuid"
+	"github.com/satori/go.uuid"
 	"html/template"
 	"net/http"
 )

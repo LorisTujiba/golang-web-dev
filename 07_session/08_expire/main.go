@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/LorisTujiba/gotraining/src/github.com/satori/go.uuid"
+	"github.com/satori/go.uuid"
 	"golang.org/x/crypto/bcrypt"
 	"html/template"
 	"net/http"
