@@ -1,0 +1,3 @@
+SELECT  PERSON.name, SPORT.name
+FROM person INNER JOIN SPORT
+    ON person.id = sport.p_id

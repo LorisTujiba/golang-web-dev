@@ -1,0 +1,12 @@
+DROP TABLE employees;
+
+CREATE TABLE employees(
+  id SERIAL PRIMARY KEY,
+  name varchar(50),
+  score int,
+  salary int default(10)
+);
+
+INSERT INTO employees(name,score,salary) values('Juan',23,53000),('Pablo',22,412312);
+
+SELECT * FROM employees

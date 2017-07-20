@@ -1,0 +1,19 @@
+SELECT * FROM employees CROSS JOIN phonenumbers;
+
+CREATE TABLE person (
+  ID  SERIAL PRIMARY KEY NOT NULL,
+  NAME           CHAR(50) NOT NULL
+);
+
+INSERT INTO person (NAME) VALUES ('Shen'), ('Daniel'), ('Juan'), ('Arin'), ('McLeod');
+
+
+CREATE TABLE sport (
+  ID  SERIAL PRIMARY KEY NOT NULL,
+  NAME           CHAR(50) NOT NULL,
+  P_ID         INT      references person(ID)
+);
+
+INSERT INTO sport (NAME, P_ID) VALUES ('Surf',1),('Soccer',3),('Ski',3),('Sail',3),('Bike',3);
+
+SELECT PERSON.NAME, SPORT.NAME FROM person CROSS JOIN sport
