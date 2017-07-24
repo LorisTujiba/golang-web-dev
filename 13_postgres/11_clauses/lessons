@@ -1,0 +1,19 @@
+SELECT * FROM employees WHERE salary > 60000;
+
+SELECT * FROM employees WHERE salary > 60000 AND score = 22;
+
+SELECT * FROM employees WHERE score IN (23,22);
+
+SELECT * FROM employees WHERE score NOT IN (23);
+
+SELECT * FROM employees WHERE score BETWEEN 23 and 27;
+
+SELECT * FROM employees WHERE score IS NOT NULL;
+
+SELECT * FROM employees WHERE name LIKE '%an%';
+
+SELECT * FROM employees WHERE score <= 24 OR salary < 54000;
+
+SELECT * FROM employees LIMIT 1;
+
+SELECT * FROM employees ORDER BY id LIMIT 1;

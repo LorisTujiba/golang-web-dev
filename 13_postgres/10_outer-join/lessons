@@ -1,0 +1,11 @@
+SELECT  PERSON.name, SPORT.name
+FROM person LEFT OUTER JOIN SPORT
+    ON person.id = sport.p_id;
+
+SELECT  PERSON.name, SPORT.name
+FROM person RIGHT OUTER JOIN SPORT
+    ON person.id = sport.p_id;
+
+SELECT  PERSON.name, SPORT.name
+FROM person FULL OUTER JOIN SPORT
+    ON person.id = sport.p_id;
