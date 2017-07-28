@@ -4,8 +4,8 @@ import (
 	"database/sql"
 	"fmt"
 	_ "github.com/lib/pq" //< don't forget this
-	"net/http"
 	"html/template"
+	"net/http"
 	"strconv"
 )
 
@@ -13,132 +13,132 @@ import (
 	/delete?id=[desired id]
 */
 
-type Employee struct{
-	Id int
-	Name string
-	Score int
+//Employee Model
+type Employee struct {
+	ID     int
+	Name   string
+	Score  int
 	Salary int
 }
 
 var db *sql.DB
 var tpl *template.Template
 
-func init(){
+func init() {
 	tpl = template.Must(template.ParseGlob("templates/*"))
 }
 
-func main(){
+func main() {
 	var err error
-	db, err = sql.Open("postgres","postgres://postgres:admin@localhost/company?sslmode=disable")
-	if err!=nil{
+	db, err = sql.Open("postgres", "postgres://postgres:admin@localhost/company?sslmode=disable")
+	if err != nil {
 		panic(err)
 	}
 	defer db.Close()
 
 	err = db.Ping()
-	if err != nil{
+	if err != nil {
 		panic(err)
 	}
 
-	http.HandleFunc("/update",update)
-	http.HandleFunc("/delete",delete)
-	http.HandleFunc("/employees",employees)
-	http.HandleFunc("/",insert)
-	http.ListenAndServe(":8080",nil)
+	http.HandleFunc("/update", update)
+	http.HandleFunc("/delete", delete)
+	http.HandleFunc("/employees", employees)
+	http.HandleFunc("/", insert)
+	http.ListenAndServe(":8080", nil)
 }
 
-func delete(w http.ResponseWriter, r *http.Request){
+func delete(w http.ResponseWriter, r *http.Request) {
 
 	id := r.FormValue("id")
 
-	if r.Method != http.MethodGet{
-		http.Error(w,http.StatusText(405), http.StatusMethodNotAllowed)
+	if r.Method != http.MethodGet {
+		http.Error(w, http.StatusText(405), http.StatusMethodNotAllowed)
 		return
 	}
 
-	db.Exec("DELETE FROM employees WHERE  id = $1",id)
+	db.Exec("DELETE FROM employees WHERE  id = $1", id)
 
-	w.Header().Set("Location","/employees")
+	w.Header().Set("Location", "/employees")
 	w.WriteHeader(http.StatusSeeOther)
 
 }
 
-func update(w http.ResponseWriter,r *http.Request){
+func update(w http.ResponseWriter, r *http.Request) {
 
 	id := r.FormValue("id")
 	rs := db.QueryRow("SELECT * FROM employees WHERE id = $1", id)
 	emp := Employee{}
-	rs.Scan(&emp.Id,&emp.Name,&emp.Score,&emp.Salary)
+	rs.Scan(&emp.ID, &emp.Name, &emp.Score, &emp.Salary)
 
-	if r.Method == http.MethodPost{
+	if r.Method == http.MethodPost {
 
 		name := r.FormValue("name")
 		score := r.FormValue("score")
 		salary := r.FormValue("salary")
-		db.Exec("UPDATE employees SET name=$1,score=$2,salary=$3 WHERE  id = $4",name,score,salary,id)
+		db.Exec("UPDATE employees SET name=$1,score=$2,salary=$3 WHERE  id = $4", name, score, salary, id)
 
-		w.Header().Set("Location","/employees")
+		w.Header().Set("Location", "/employees")
 		w.WriteHeader(http.StatusSeeOther)
 	}
 
-
-	tpl.ExecuteTemplate(w,"update.gohtml",emp)
+	tpl.ExecuteTemplate(w, "update.gohtml", emp)
 
 }
 
-func insert(w http.ResponseWriter, r *http.Request){
+func insert(w http.ResponseWriter, r *http.Request) {
 
 	var err error
-	if r.Method == http.MethodPost{
+	if r.Method == http.MethodPost {
 		emp := Employee{}
-		emp.Name 	= r.FormValue("name")
-		emp.Score,err = strconv.Atoi(r.FormValue("score"))
-		if err!=nil{
+		emp.Name = r.FormValue("name")
+		emp.Score, err = strconv.Atoi(r.FormValue("score"))
+		if err != nil {
 			panic(err)
 		}
-		emp.Salary,err	= strconv.Atoi(r.FormValue("salary"))
-		if err!=nil{
+		emp.Salary, err = strconv.Atoi(r.FormValue("salary"))
+		if err != nil {
 			panic(err)
 		}
 
-		_,err = db.Exec("INSERT INTO employees (name,score,salary) VALUES($1,$2,$3)",emp.Name,emp.Score,emp.Salary)
-		if err!=nil{
+		_, err = db.Exec("INSERT INTO employees (name,score,salary) VALUES($1,$2,$3)", emp.Name, emp.Score, emp.Salary)
+		if err != nil {
 			panic(err)
 		}
-		w.Header().Set("Location","/")
+		w.Header().Set("Location", "/")
 		w.WriteHeader(http.StatusSeeOther)
 	}
 
-	tpl.ExecuteTemplate(w,"insert.gohtml",nil)
+	tpl.ExecuteTemplate(w, "insert.gohtml", nil)
 }
 
-func employees(w http.ResponseWriter, r *http.Request){
+func employees(w http.ResponseWriter, r *http.Request) {
 
-	if r.Method != "GET"{
-		http.Error(w,http.StatusText(405),http.StatusMethodNotAllowed)
+	if r.Method != "GET" {
+		http.Error(w, http.StatusText(405), http.StatusMethodNotAllowed)
 		return
 	}
 
 	//select query
 	rows, err := db.Query("Select * from employees")
-	if err != nil{
+	if err != nil {
 		panic(err)
 	}
 	defer rows.Close()
 
-	eml := make([]Employee,0)
+	eml := make([]Employee, 0)
 
-	for rows.Next(){
+	for rows.Next() {
 		em := Employee{}
-		err:= rows.Scan(&em.Id,&em.Name,&em.Score,&em.Salary)//order matters
-		if err !=nil{
+		err := rows.Scan(&em.ID, &em.Name, &em.Score, &em.Salary) //order matters
+		if err != nil {
 			panic(err)
 		}
-		eml = append(eml,em)
+		eml = append(eml, em)
 	}
 
 	//print out
-	for _, em := range eml{
-		fmt.Fprintf(w,`%d : %s\t,Score : %d, IDR %d \n`, em.Id,em.Name,em.Score,em.Salary)
+	for _, em := range eml {
+		fmt.Fprintf(w, `%d : %s\t,Score : %d, IDR %d \n`, em.ID, em.Name, em.Score, em.Salary)
 	}
 }

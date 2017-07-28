@@ -42,93 +42,94 @@ identifiers.source: postgres docs
 Run thr application with this,
 curl -i localhost:8080/employees/emp?id=1
 
- */
+*/
 
-type Employee struct{
-	Id int
-	Name string
-	Score int
+//Employee model
+type Employee struct {
+	ID     int
+	Name   string
+	Score  int
 	Salary int
 }
 
 var db *sql.DB
 
-func main(){
+func main() {
 	var err error
-	db, err = sql.Open("postgres","postgres://postgres:admin@localhost/company?sslmode=disable")
-	if err!=nil{
+	db, err = sql.Open("postgres", "postgres://postgres:admin@localhost/company?sslmode=disable")
+	if err != nil {
 		panic(err)
 	}
 	defer db.Close()
 
 	err = db.Ping()
-	if err != nil{
+	if err != nil {
 		panic(err)
 	}
 
-	http.HandleFunc("/employees",employeeIndex)
+	http.HandleFunc("/employees", employeeIndex)
 	http.HandleFunc("/employees/emp", employeeEmp)
-	http.ListenAndServe(":8080",nil)
+	http.ListenAndServe(":8080", nil)
 
 }
 
-func employeeEmp(w http.ResponseWriter,r *http.Request){
-	if r.Method != "GET"{
-		http.Error(w,http.StatusText(405),http.StatusMethodNotAllowed)
+func employeeEmp(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "GET" {
+		http.Error(w, http.StatusText(405), http.StatusMethodNotAllowed)
 		return
 	}
 
 	id := r.FormValue("id")
-	if id == ""{
-		http.Error(w,http.StatusText(404),http.StatusBadRequest)
+	if id == "" {
+		http.Error(w, http.StatusText(404), http.StatusBadRequest)
 		return
 	}
 
 	//select query
-	row := db.QueryRow("Select * from employees where id = $1",id)
+	row := db.QueryRow("Select * from employees where id = $1", id)
 
 	em := Employee{}
 
-	err:= row.Scan(&em.Id,&em.Name,&em.Score,&em.Salary)//order matters
+	err := row.Scan(&em.ID, &em.Name, &em.Score, &em.Salary) //order matters
 	switch {
 	case err == sql.ErrNoRows:
-		http.NotFound(w,r)
+		http.NotFound(w, r)
 		return
-	case err!=nil:
-		http.Error(w,http.StatusText(500),http.StatusInternalServerError)
+	case err != nil:
+		http.Error(w, http.StatusText(500), http.StatusInternalServerError)
 		return
 	}
 
-	fmt.Fprintf(w,"%d : %s\t,Score : %d, IDR %d\n", em.Id,em.Name,em.Score,em.Salary)
+	fmt.Fprintf(w, "%d : %s\t,Score : %d, IDR %d\n", em.ID, em.Name, em.Score, em.Salary)
 }
 
-func employeeIndex(w http.ResponseWriter, r *http.Request){
+func employeeIndex(w http.ResponseWriter, r *http.Request) {
 
-	if r.Method != "GET"{
-		http.Error(w,http.StatusText(405),http.StatusMethodNotAllowed)
+	if r.Method != "GET" {
+		http.Error(w, http.StatusText(405), http.StatusMethodNotAllowed)
 		return
 	}
 
 	//select query
 	rows, err := db.Query("Select * from employees")
-	if err != nil{
+	if err != nil {
 		panic(err)
 	}
 	defer rows.Close()
 
-	eml := make([]Employee,0)
+	eml := make([]Employee, 0)
 
-	for rows.Next(){
+	for rows.Next() {
 		em := Employee{}
-		err:= rows.Scan(&em.Id,&em.Name,&em.Score,&em.Salary)//order matters
-		if err !=nil{
+		err := rows.Scan(&em.ID, &em.Name, &em.Score, &em.Salary) //order matters
+		if err != nil {
 			panic(err)
 		}
-		eml = append(eml,em)
+		eml = append(eml, em)
 	}
 
 	//print out
-	for _, em := range eml{
-		fmt.Fprintf(w,"%d : %s\t,Score : %d, IDR %d\n", em.Id,em.Name,em.Score,em.Salary)
+	for _, em := range eml {
+		fmt.Fprintf(w, "%d : %s\t,Score : %d, IDR %d\n", em.ID, em.Name, em.Score, em.Salary)
 	}
 }

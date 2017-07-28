@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title></title>
+</head>
+<body>
+    <h3>
+        <a href="/insert">Insert</a>
+    </h3>
+    {{range .}}
+        <p>
+            <p>
+                Name    : {{.Name}}<br>
+                Score   : {{.Score}}<br>
+                Salary  : {{.Salary}}<br>
+            </p>
+            <h5>
+                <a href="/update?name={{.Name}}">Update</a>
+            </h5>
+            <h5>
+                <a href="/delete?name={{.Name}}">Delete</a>
+            </h5>
+        </p>
+    {{end}}
+</body>
+</html>
